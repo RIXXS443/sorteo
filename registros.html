@@ -230,7 +230,6 @@
     <label><input type="checkbox" value="148"> 148</label>
     <label><input type="checkbox" value="149"> 149</label>
     <label><input type="checkbox" value="150"> 150</label>
-      <!-- Agregar más números según sea necesario -->
     </div>
 
     <table id="sorteo-table">
@@ -336,6 +335,16 @@
         .then(response => response.json())
         .then(data => {
           console.log('Registros obtenidos:', data);
+          const registeredNumbers = data.map(registro => registro.Numero); // Obtener los números registrados
+
+          // Marcar los checkboxes correspondientes
+          numberCheckboxes.forEach(checkbox => {
+            if (registeredNumbers.includes(checkbox.value)) {
+              checkbox.checked = true; // Marcar el checkbox si el número está registrado
+            }
+          });
+
+          // Agregar los registros a la tabla
           data.forEach(registro => {
             const row = document.createElement('tr');
             const numberCell = document.createElement('td');
