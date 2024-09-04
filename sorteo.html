@@ -1,8 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8">
   <title>Registro de Sorteo</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .sorteo-info, .form-group {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    input[type="text"] {
+      padding: 5px;
+      width: 200px;
+      margin-right: 10px;
+    }
+
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+  </style>
 </head>
 <body>
   <h1>Registro de Sorteo</h1>
@@ -29,11 +80,64 @@
     <div class="form-group">
       <label for="participant-name">Nombre del Participante:</label>
       <input type="text" id="participant-name" required>
-
       <button id="add-participant">Agregar Participante</button>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sorteoNameInput = document.getElementById('sorteo-name');
+      const sorteoNumbersInput = document.getElementById('sorteo-numbers');
+      const addParticipantButton = document.getElementById('add-participant');
+      const sorteoTableBody = document.querySelector('#sorteo-table tbody');
+      const participantNameInput = document.getElementById('participant-name');
+
+      addParticipantButton.addEventListener('click', function () {
+        const sorteoName = sorteoNameInput.value.trim();
+        const sorteoNumbersString = sorteoNumbersInput.value.trim();
+        const participantName = participantNameInput.value.trim();
+
+        // Validaciones
+        if (!sorteoName || !sorteoNumbersString || !participantName) {
+          alert("Por favor, completa todos los campos.");
+          return;
+        }
+
+        const sorteoNumbers = sorteoNumbersString.split(',')
+          .map(num => num.trim())
+          .filter(num => !isNaN(num) && num !== '')
+          .map(Number);
+
+        if (sorteoNumbers.length === 0) {
+          alert("Introduce números válidos separados por comas.");
+          return;
+        }
+
+        // Agregar participante y números al sorteo
+        sorteoNumbers.forEach(function (number) {
+          const row = document.createElement('tr');
+          const numberCell = document.createElement('td');
+          const nameCell = document.createElement('td');
+
+          numberCell.textContent = number;
+          nameCell.textContent = participantName;
+
+          row.appendChild(numberCell);
+          row.appendChild(nameCell);
+          sorteoTableBody.appendChild(row);
+        });
+
+        // Limpiar los campos de entrada
+        participantNameInput.value = '';
+      });
+
+      // Desactivar botón si faltan datos
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', () => {
+          addParticipantButton.disabled = !sorteoNameInput.value.trim() || !sorteoNumbersInput.value.trim() || !participantNameInput.value.trim();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
