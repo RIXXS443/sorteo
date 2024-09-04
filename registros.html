@@ -344,9 +344,14 @@ function obtenerNumerosRegistrados() {
   fetch(url, {
     method: 'GET'
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error en la respuesta de la API');
+    }
+    return response.json();
+  })
   .then(data => {
-    console.log('Registros obtenidos:', data);
+    console.log('Registros obtenidos:', data);  // Verifica los datos aquí
     data.forEach(registro => {
       const row = document.createElement('tr');
       const numberCell = document.createElement('td');
@@ -372,7 +377,7 @@ function obtenerNumerosRegistrados() {
     });
   })
   .catch(error => {
-    console.error('Error al obtener registros:', error);
+    console.error('Error al obtener registros:', error);  // Verifica si hay errores aquí
   });
 }
   </script>
