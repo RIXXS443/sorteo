@@ -43,6 +43,20 @@
       margin-right: 10px;
     }
 
+    .number-selection {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+
+    .number-selection label {
+      display: inline-block;
+      margin: 5px;
+    }
+
     button {
       padding: 5px 10px;
       cursor: pointer;
@@ -52,7 +66,6 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
-
   </style>
 </head>
 <body>
@@ -62,9 +75,21 @@
     <div class="sorteo-info">
       <label for="sorteo-name">Nombre del Sorteo:</label>
       <input type="text" id="sorteo-name" required>
+    </div>
 
-      <label for="sorteo-numbers">Números del Sorteo (separados por comas):</label>
-      <input type="text" id="sorteo-numbers" required>
+    <!-- Selección de números de forma visual -->
+    <div class="number-selection">
+      <label><input type="checkbox" value="1"> 1</label>
+      <label><input type="checkbox" value="2"> 2</label>
+      <label><input type="checkbox" value="3"> 3</label>
+      <label><input type="checkbox" value="4"> 4</label>
+      <label><input type="checkbox" value="5"> 5</label>
+      <label><input type="checkbox" value="6"> 6</label>
+      <label><input type="checkbox" value="7"> 7</label>
+      <label><input type="checkbox" value="8"> 8</label>
+      <label><input type="checkbox" value="9"> 9</label>
+      <label><input type="checkbox" value="10"> 10</label>
+      <!-- Agregar más números según sea necesario -->
     </div>
 
     <table id="sorteo-table">
@@ -87,34 +112,28 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const sorteoNameInput = document.getElementById('sorteo-name');
-      const sorteoNumbersInput = document.getElementById('sorteo-numbers');
       const addParticipantButton = document.getElementById('add-participant');
       const sorteoTableBody = document.querySelector('#sorteo-table tbody');
       const participantNameInput = document.getElementById('participant-name');
+      const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
 
       addParticipantButton.addEventListener('click', function () {
         const sorteoName = sorteoNameInput.value.trim();
-        const sorteoNumbersString = sorteoNumbersInput.value.trim();
         const participantName = participantNameInput.value.trim();
+        
+        // Obtener números seleccionados
+        const selectedNumbers = Array.from(numberCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
 
         // Validaciones
-        if (!sorteoName || !sorteoNumbersString || !participantName) {
-          alert("Por favor, completa todos los campos.");
-          return;
-        }
-
-        const sorteoNumbers = sorteoNumbersString.split(',')
-          .map(num => num.trim())
-          .filter(num => !isNaN(num) && num !== '')
-          .map(Number);
-
-        if (sorteoNumbers.length === 0) {
-          alert("Introduce números válidos separados por comas.");
+        if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
+          alert("Por favor, completa todos los campos y selecciona al menos un número.");
           return;
         }
 
         // Agregar participante y números al sorteo
-        sorteoNumbers.forEach(function (number) {
+        selectedNumbers.forEach(function (number) {
           const row = document.createElement('tr');
           const numberCell = document.createElement('td');
           const nameCell = document.createElement('td');
@@ -132,13 +151,7 @@
 
         // Limpiar los campos de entrada
         participantNameInput.value = '';
-      });
-
-      // Desactivar botón si faltan datos
-      document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', () => {
-          addParticipantButton.disabled = !sorteoNameInput.value.trim() || !sorteoNumbersInput.value.trim() || !participantNameInput.value.trim();
-        });
+        numberCheckboxes.forEach(checkbox => checkbox.checked = false);
       });
 
       function guardarParticipanteEnBaseDeDatos(sorteo, numero, nombre) {
