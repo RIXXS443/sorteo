@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registro de Sorteo</title>
   <style>
     body {
@@ -40,15 +39,14 @@
 
     input[type="text"] {
       padding: 5px;
-      width: calc(100% - 20px);
+      width: 200px;
       margin-right: 10px;
-      box-sizing: border-box;
     }
 
     .number-selection {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 10px;
       margin-top: 10px;
       margin-bottom: 20px;
@@ -68,22 +66,6 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
-
-    @media (max-width: 600px) {
-      input[type="text"] {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-
-      .number-selection {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .number-selection label {
-        margin: 5px 0;
-      }
-    }
   </style>
 </head>
 <body>
@@ -95,8 +77,10 @@
       <input type="text" id="sorteo-name" required>
     </div>
 
+    <!-- Selección de números de forma visual -->
     <div class="number-selection">
-      <label><input type="checkbox" value="2"> 2</label>
+     <label><input type="checkbox" value="1"> 1</label>
+    <label><input type="checkbox" value="2"> 2</label>
     <label><input type="checkbox" value="3"> 3</label>
     <label><input type="checkbox" value="4"> 4</label>
     <label><input type="checkbox" value="5"> 5</label>
@@ -246,6 +230,7 @@
     <label><input type="checkbox" value="148"> 148</label>
     <label><input type="checkbox" value="149"> 149</label>
     <label><input type="checkbox" value="150"> 150</label>
+      <!-- Agregar más números según sea necesario -->
     </div>
 
     <table id="sorteo-table">
@@ -267,81 +252,111 @@
   </div>
 
   <script>
-   document.addEventListener('DOMContentLoaded', function () {
-  const sorteoNameInput = document.getElementById('sorteo-name');
-  const addParticipantButton = document.getElementById('add-participant');
-  const sorteoTableBody = document.querySelector('#sorteo-table tbody');
-  const participantNameInput = document.getElementById('participant-name');
-  const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
+    document.addEventListener('DOMContentLoaded', function () {
+      const sorteoNameInput = document.getElementById('sorteo-name');
+      const addParticipantButton = document.getElementById('add-participant');
+      const sorteoTableBody = document.querySelector('#sorteo-table tbody');
+      const participantNameInput = document.getElementById('participant-name');
+      const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
 
-  // Almacenar números ya registrados
-  const numerosRegistrados = new Set();
+      // Obtener números registrados al cargar la página
+      obtenerNumerosRegistrados();
 
-  // Obtener números registrados al cargar la página
-  obtenerNumerosRegistrados();
+      addParticipantButton.addEventListener('click', function () {
+        const sorteoName = sorteoNameInput.value.trim();
+        const participantName = participantNameInput.value.trim();
+        
+        // Obtener números seleccionados
+        const selectedNumbers = Array.from(numberCheckboxes)
+          .filter(checkbox => checkbox.checked)
+          .map(checkbox => checkbox.value);
 
-  addParticipantButton.addEventListener('click', function () {
-    const sorteoName = sorteoNameInput.value.trim();
-    const participantName = participantNameInput.value.trim();
-    
-    // Obtener números seleccionados
-    const selectedNumbers = Array.from(numberCheckboxes)
-      .filter(checkbox => checkbox.checked)
-      .map(checkbox => checkbox.value);
+        // Validaciones
+        if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
+          alert("Por favor, completa todos los campos y selecciona al menos un número.");
+          return;
+        }
 
-    // Validaciones
-    if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
-      alert("Por favor, completa todos los campos y selecciona al menos un número.");
-      return;
-    }
+        // Agregar participante y números al sorteo
+        selectedNumbers.forEach(function (number) {
+          const row = document.createElement('tr');
+          const numberCell = document.createElement('td');
+          const nameCell = document.createElement('td');
+          const sorteoCell = document.createElement('td');
 
-    // Verificar duplicados en la tabla
-    const duplicados = selectedNumbers.filter(num => {
-      return Array.from(sorteoTableBody.querySelectorAll('tr td:first-child'))
-        .some(cell => cell.textContent === num);
+          numberCell.textContent = number;
+          nameCell.textContent = participantName;
+          sorteoCell.textContent = sorteoName;
+
+          row.appendChild(numberCell);
+          row.appendChild(nameCell);
+          row.appendChild(sorteoCell);
+          sorteoTableBody.appendChild(row);
+
+          // Llamada al API para guardar en la base de datos
+          guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
+        });
+
+        // Limpiar los campos de entrada
+        participantNameInput.value = '';
+        numberCheckboxes.forEach(checkbox => checkbox.checked = false);
+      });
+
+      function guardarParticipanteEnBaseDeDatos(sorteo, numero, nombre) {
+        const url = 'https://prod-02.brazilsouth.logic.azure.com/workflows/e0216dc0080c434f92f90ffda79fd4ff/triggers/manual/paths/invoke/crear_participante?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lWqG4wSkg3jW3VK7Sl-5oRVdUsijaLZ3BzovP6e86ZA';
+
+        const data = {
+          Numero: numero.toString(),
+          Nombre: nombre,
+          Sorteo: sorteo
+        };
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Participante guardado:', data);
+        })
+        .catch(error => {
+          console.error('Error al guardar participante:', error);
+        });
+      }
+
+      function obtenerNumerosRegistrados() {
+        const url = 'https://prod-21.brazilsouth.logic.azure.com/workflows/a1f66a512b30401f837963fb67c270fb/triggers/manual/paths/invoke/obtener_registros?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=wv5unUjOMZBO6-uen9yvRsJi-ao7WAkE_pB35q_0D7k';
+
+        fetch(url, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Registros obtenidos:', data);
+          data.forEach(registro => {
+            const row = document.createElement('tr');
+            const numberCell = document.createElement('td');
+            const nameCell = document.createElement('td');
+            const sorteoCell = document.createElement('td');
+
+            numberCell.textContent = registro.Numero;
+            nameCell.textContent = registro["Nombre y Apellido"];
+            sorteoCell.textContent = registro.Sorteo;
+
+            row.appendChild(numberCell);
+            row.appendChild(nameCell);
+            row.appendChild(sorteoCell);
+            sorteoTableBody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error('Error al obtener registros:', error);
+        });
+      }
     });
-
-    if (duplicados.length > 0) {
-      alert(`Los números ya están registrados en la tabla: ${duplicados.join(', ')}`);
-      return;
-    }
-
-    // Agregar participante y números al sorteo
-    selectedNumbers.forEach(function (number) {
-      const row = document.createElement('tr');
-      const numberCell = document.createElement('td');
-      const nameCell = document.createElement('td');
-      const sorteoCell = document.createElement('td');
-
-      numberCell.textContent = number;
-      nameCell.textContent = participantName;
-      sorteoCell.textContent = sorteoName;
-
-      row.appendChild(numberCell);
-      row.appendChild(nameCell);
-      row.appendChild(sorteoCell);
-      sorteoTableBody.appendChild(row);
-
-      // Guardar el número en el conjunto para evitar duplicados
-      numerosRegistrados.add(number);
-
-      // Llamada al API para guardar en la base de datos
-      guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
-    });
-
-    // Limpiar los campos de entrada
-    participantNameInput.value = '';
-    numberCheckboxes.forEach(checkbox => checkbox.checked = false);
-  });
-
-  function guardarParticipanteEnBaseDeDatos(sorteo, numero, nombre) {
-    // Código para guardar el participante en la base de datos
-  }
-
-  function obtenerNumerosRegistrados() {
-    // Código para obtener los números registrados desde la base de datos
-  }
-});
   </script>
 </body>
 </html>
