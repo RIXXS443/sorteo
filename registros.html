@@ -3,122 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <title>Registro de Sorteo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fa;
-      color: #333;
-    }
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+  }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Responsive width */
+  }
 
-    h1 {
-      text-align: center;
-      color: #007bff;
-    }
+  h1 {
+    text-align: center;
+    color: #007bff;
+    font-size: 2rem; /* Ajuste de tamaño para pantallas pequeñas */
+  }
 
-    .sorteo-info, .form-group {
-      margin-bottom: 20px;
-      text-align: center;
-    }
+  .sorteo-info, .form-group {
+    margin-bottom: 20px;
+    text-align: center;
+  }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
 
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem; /* Ajuste de tamaño de fuente */
+  }
 
-    input[type="text"] {
-      padding: 8px;
-      width: 250px;
-      margin-right: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
+  input[type="text"] {
+    padding: 8px;
+    width: calc(100% - 20px); /* Ajuste responsive */
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-width: 250px; /* Máximo ancho */
+  }
 
+  .number-selection {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .number-selection input[type="checkbox"] {
+    display: none;
+  }
+
+  .number-selection label {
+    display: inline-block;
+    margin: 5px;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    position: relative;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 40px; /* Mínimo ancho para móviles */
+    text-align: center;
+  }
+
+  .number-selection input[type="checkbox"]:disabled + label {
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
+    position: relative;
+  }
+
+  .number-selection input[type="checkbox"]:disabled + label::before {
+    content: 'X';
+    font-size: 20px;
+    color: #d9534f;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+  }
+
+  .number-selection input[type="checkbox"]:checked + label {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    transform: scale(1.1);
+  }
+
+  button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 1rem; /* Ajuste de tamaño de fuente */
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  /* Media Queries para hacer que la página sea responsive */
+  @media (max-width: 768px) {
     .number-selection {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-    }
-
-    .number-selection input[type="checkbox"] {
-      display: none;
+      gap: 5px; /* Espacio más pequeño entre los elementos */
     }
 
     .number-selection label {
-      display: inline-block;
-      margin: 5px;
-      font-size: 18px;
-      padding: 10px 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      position: relative;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      font-size: 1rem; /* Tamaño de fuente reducido */
+      padding: 8px 12px; /* Padding ajustado */
     }
 
-    .number-selection input[type="checkbox"]:disabled + label {
-      background-color: #eee;
-      color: #999;
-      cursor: not-allowed;
-      position: relative;
+    table th, table td {
+      font-size: 0.9rem; /* Reducir tamaño de fuente */
+      padding: 8px; /* Ajustar padding */
+    }
+  }
+
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.5rem; /* Reducir tamaño de fuente para móviles */
     }
 
-    .number-selection input[type="checkbox"]:disabled + label::before {
-      content: 'X';
-      font-size: 20px;
-      color: #d9534f;
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(50%, -50%);
-    }
-
-    .number-selection input[type="checkbox"]:checked + label {
-      background-color: #007bff;
-      color: white;
-      border: 1px solid #007bff;
-      transform: scale(1.1);
+    .number-selection label {
+      font-size: 0.9rem; /* Tamaño de fuente más pequeño */
+      padding: 5px 10px; /* Padding más pequeño */
     }
 
     button {
-      padding: 8px 15px;
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      width: 100%; /* Botón toma el 100% del ancho en móviles */
+      padding: 12px; /* Ajustar padding del botón */
     }
 
-    button:hover {
-      background-color: #0056b3;
+    input[type="text"] {
+      width: 100%; /* Ajustar ancho de los campos de texto */
+      max-width: none; /* Eliminar máximo ancho en móviles */
     }
-
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <h1>Registro de Sorteo</h1>
