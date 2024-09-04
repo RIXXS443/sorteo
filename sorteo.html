@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registro de Sorteo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Registro de Sorteo</h1>
+
+  <div class="container">
+    <div class="sorteo-info">
+      <label for="sorteo-name">Nombre del Sorteo:</label>
+      <input type="text" id="sorteo-name" required>
+
+      <label for="sorteo-numbers">Números del Sorteo (separados por comas):</label>
+      <input type="text" id="sorteo-numbers" required>
+    </div>
+
+    <table id="sorteo-table">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Nombre</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="form-group">
+      <label for="participant-name">Nombre del Participante:</label>
+      <input type="text" id="participant-name" required>
+
+      <button id="add-participant">Agregar Participante</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
