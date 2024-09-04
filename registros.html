@@ -78,7 +78,7 @@
     </div>
 
     <div class="number-selection">
-      <label><input type="checkbox" value="1"> 1</label>
+<label><input type="checkbox" value="1"> 1</label>
     <label><input type="checkbox" value="2"> 2</label>
     <label><input type="checkbox" value="3"> 3</label>
     <label><input type="checkbox" value="4"> 4</label>
@@ -257,6 +257,9 @@
       const participantNameInput = document.getElementById('participant-name');
       const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
 
+      // Almacenar números ya registrados
+      const numerosRegistrados = new Set();
+
       // Obtener números registrados al cargar la página
       obtenerNumerosRegistrados();
 
@@ -268,11 +271,20 @@
           .filter(checkbox => checkbox.checked)
           .map(checkbox => checkbox.value);
 
+        // Validaciones
         if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
           alert("Por favor, completa todos los campos y selecciona al menos un número.");
           return;
         }
 
+        // Verificar duplicados
+        const duplicados = selectedNumbers.filter(num => numerosRegistrados.has(num));
+        if (duplicados.length > 0) {
+          alert(`Los números ya están registrados: ${duplicados.join(', ')}`);
+          return;
+        }
+
+        // Agregar participante y números al sorteo
         selectedNumbers.forEach(function (number) {
           const row = document.createElement('tr');
           const numberCell = document.createElement('td');
@@ -288,9 +300,14 @@
           row.appendChild(sorteoCell);
           sorteoTableBody.appendChild(row);
 
+          // Guardar el número en el conjunto para evitar duplicados
+          numerosRegistrados.add(number);
+
+          // Llamada al API para guardar en la base de datos
           guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
         });
 
+        // Limpiar los campos de entrada
         participantNameInput.value = '';
         numberCheckboxes.forEach(checkbox => checkbox.checked = false);
       });
@@ -348,6 +365,8 @@
             numberCheckboxes.forEach(checkbox => {
               if (checkbox.value === registro.Numero) {
                 checkbox.checked = true;
+                // Agregar el número a los registrados
+                numerosRegistrados.add(registro.Numero);
               }
             });
           });
