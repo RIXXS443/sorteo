@@ -8,22 +8,22 @@
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f8f9fa; /* Fondo suave */
-    color: #333; /* Color del texto */
+    background-color: #f8f9fa;
+    color: #333;
   }
 
   .container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff; /* Fondo blanco */
-    border-radius: 8px; /* Borde redondeado */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   h1 {
     text-align: center;
-    color: #007bff; /* Color azul para el título */
+    color: #007bff;
   }
 
   .sorteo-info, .form-group {
@@ -68,32 +68,32 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     position: relative;
-    transition: all 0.3s ease; /* Transición suave */
+    transition: all 0.3s ease;
     cursor: pointer;
   }
 
   .number-selection input[type="checkbox"]:disabled + label {
-    background-color: #eee; /* Fondo gris claro */
-    color: #999; /* Color de texto gris */
-    cursor: not-allowed; /* Mostrar que no se puede seleccionar */
-    text-decoration: line-through; /* Texto tachado */
+    background-color: #eee;
+    color: #999;
+    cursor: not-allowed;
     position: relative;
   }
 
-  .number-selection input[type="checkbox"]:disabled + label::after {
-    content: 'X'; /* Mostrar una "X" */
+  .number-selection input[type="checkbox"]:disabled + label::before {
+    content: 'X';
     font-size: 20px;
-    color: #d9534f; /* Color rojo */
+    color: #d9534f;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0;
+    right: 0;
+    transform: translate(0, -10%);
   }
 
   .number-selection input[type="checkbox"]:checked + label {
-    background-color: #007bff; /* Fondo azul */
-    color: white; /* Color de texto blanco */
+    background-color: #007bff;
+    color: white;
     border: 1px solid #007bff;
-    transform: scale(1.1); /* Agrandar un poco al seleccionarlo */
+    transform: scale(1.1);
   }
 
   button {
@@ -103,11 +103,11 @@
     color: white;
     border: none;
     border-radius: 5px;
-    transition: background-color 0.3s ease; /* Transición suave */
+    transition: background-color 0.3s ease;
   }
 
   button:hover {
-    background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+    background-color: #0056b3;
   }
 
   button:disabled {
