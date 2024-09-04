@@ -125,6 +125,9 @@
           row.appendChild(numberCell);
           row.appendChild(nameCell);
           sorteoTableBody.appendChild(row);
+
+          // Llamada al API para guardar en la base de datos
+          guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
         });
 
         // Limpiar los campos de entrada
@@ -137,6 +140,31 @@
           addParticipantButton.disabled = !sorteoNameInput.value.trim() || !sorteoNumbersInput.value.trim() || !participantNameInput.value.trim();
         });
       });
+
+      function guardarParticipanteEnBaseDeDatos(sorteo, numero, nombre) {
+        const url = 'https://prod-02.brazilsouth.logic.azure.com/workflows/e0216dc0080c434f92f90ffda79fd4ff/triggers/manual/paths/invoke/crear_participante?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lWqG4wSkg3jW3VK7Sl-5oRVdUsijaLZ3BzovP6e86ZA';
+
+        const data = {
+          Numero: numero.toString(),
+          Nombre: nombre,
+          Sorteo: sorteo
+        };
+
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Participante guardado:', data);
+        })
+        .catch(error => {
+          console.error('Error al guardar participante:', error);
+        });
+      }
     });
   </script>
 </body>
