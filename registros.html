@@ -257,6 +257,7 @@
       const sorteoTableBody = document.querySelector('#sorteo-table tbody');
       const participantNameInput = document.getElementById('participant-name');
       const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
+      const registeredNumbers = new Set(); // Set para almacenar números registrados
 
       // Obtener números registrados al cargar la página
       obtenerNumerosRegistrados();
@@ -278,9 +279,8 @@
 
         // Agregar participante y números al sorteo
         selectedNumbers.forEach(function (number) {
-          // Verificar si el número ya está en la tabla
-          const existingRow = Array.from(sorteoTableBody.rows).find(row => row.cells[0].textContent === number);
-          if (!existingRow) { // Solo agregar si no existe
+          // Verificar si el número ya está registrado
+          if (!registeredNumbers.has(number)) { // Solo agregar si no está registrado
             const row = document.createElement('tr');
             const numberCell = document.createElement('td');
             const nameCell = document.createElement('td');
@@ -341,17 +341,16 @@
         .then(response => response.json())
         .then(data => {
           console.log('Registros obtenidos:', data);
-          const registeredNumbers = data.map(registro => registro.Numero); // Obtener los números registrados
 
-          // Marcar los checkboxes correspondientes
-          numberCheckboxes.forEach(checkbox => {
-            if (registeredNumbers.includes(checkbox.value)) {
-              checkbox.checked = true; // Marcar el checkbox si el número está registrado
-            }
-          });
-
-          // Agregar los registros a la tabla
+          // Marcar los checkboxes correspondientes y añadir al Set de números registrados
           data.forEach(registro => {
+            registeredNumbers.add(registro.Numero); // Guardar el número como registrado
+            const checkbox = document.querySelector(`.number-selection input[value="${registro.Numero}"]`);
+            if (checkbox) {
+              checkbox.disabled = true; // Desactivar checkbox si el número está registrado
+            }
+
+            // Agregar los registros a la tabla
             const row = document.createElement('tr');
             const numberCell = document.createElement('td');
             const nameCell = document.createElement('td');
