@@ -77,7 +77,6 @@
       <input type="text" id="sorteo-name" required>
     </div>
 
-    <!-- Selección de números de forma visual -->
     <div class="number-selection">
       <label><input type="checkbox" value="1"> 1</label>
     <label><input type="checkbox" value="2"> 2</label>
@@ -230,7 +229,6 @@
     <label><input type="checkbox" value="148"> 148</label>
     <label><input type="checkbox" value="149"> 149</label>
     <label><input type="checkbox" value="150"> 150</label>
-      <!-- Agregar más números según sea necesario -->
     </div>
 
     <table id="sorteo-table">
@@ -266,18 +264,15 @@
         const sorteoName = sorteoNameInput.value.trim();
         const participantName = participantNameInput.value.trim();
         
-        // Obtener números seleccionados
         const selectedNumbers = Array.from(numberCheckboxes)
           .filter(checkbox => checkbox.checked)
           .map(checkbox => checkbox.value);
 
-        // Validaciones
         if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
           alert("Por favor, completa todos los campos y selecciona al menos un número.");
           return;
         }
 
-        // Agregar participante y números al sorteo
         selectedNumbers.forEach(function (number) {
           const row = document.createElement('tr');
           const numberCell = document.createElement('td');
@@ -293,11 +288,9 @@
           row.appendChild(sorteoCell);
           sorteoTableBody.appendChild(row);
 
-          // Llamada al API para guardar en la base de datos
           guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
         });
 
-        // Limpiar los campos de entrada
         participantNameInput.value = '';
         numberCheckboxes.forEach(checkbox => checkbox.checked = false);
       });
@@ -350,6 +343,13 @@
             row.appendChild(nameCell);
             row.appendChild(sorteoCell);
             sorteoTableBody.appendChild(row);
+
+            // Marcar los checkboxes correspondientes a los números registrados
+            numberCheckboxes.forEach(checkbox => {
+              if (checkbox.value === registro.Numero) {
+                checkbox.checked = true;
+              }
+            });
           });
         })
         .catch(error => {
