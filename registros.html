@@ -1,115 +1,212 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Registro de Sorteo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<title>Registro de Sorteo</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f8f9fa;
+color: #333;
+}
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+.container {
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+width: 90%; /* Responsive width */
+}
 
-    h1 {
-      text-align: center;
-    }
+h1 {
+text-align: center;
+color: #007bff;
+font-size: 2rem; /* Ajuste de tamaño para pantallas pequeñas */
+}
 
-    .sorteo-info, .form-group {
-      margin-bottom: 20px;
-      text-align: center;
-    }
+.sorteo-info, .form-group {
+margin-bottom: 20px;
+text-align: center;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
+table {
+width: 100%;
+border-collapse: collapse;
+margin-bottom: 20px;
+}
 
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
+th, td {
+padding: 10px;
+text-align: left;
+border-bottom: 1px solid #ddd;
+font-size: 1rem; /* Ajuste de tamaño de fuente */
+}
 
-    input[type="text"] {
-      padding: 5px;
-      width: 200px;
-      margin-right: 10px;
-    }
+input[type="text"] {
+padding: 8px;
+width: calc(100% - 20px); /* Ajuste responsive */
+margin: 0 auto;
+border: 1px solid #ddd;
+border-radius: 4px;
+max-width: 250px; /* Máximo ancho */
+}
 
-    .number-selection {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-    }
+.number-selection {
+display: flex;
+justify-content: center;
+flex-wrap: wrap;
+gap: 10px;
+margin-top: 10px;
+margin-bottom: 20px;
+}
 
-    .number-selection label {
-      display: inline-block;
-      margin: 5px;
-    }
+.number-selection input[type="checkbox"] {
+display: none;
+}
 
-    button {
-      padding: 5px 10px;
-      cursor: pointer;
-    }
+.number-selection label {
+display: inline-block;
+margin: 5px;
+font-size: 1.1rem;
+padding: 10px 15px;
+border: 1px solid #ddd;
+border-radius: 5px;
+position: relative;
+transition: all 0.3s ease;
+cursor: pointer;
+min-width: 40px; /* Mínimo ancho para móviles */
+text-align: center;
+}
 
-    button:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  </style>
+.number-selection input[type="checkbox"]:disabled + label {
+background-color: #eee;
+color: #999;
+cursor: not-allowed;
+position: relative;
+}
+
+.number-selection input[type="checkbox"]:disabled + label::before {
+content: 'X';
+font-size: 20px;
+color: #d9534f;
+position: absolute;
+top: 0;
+right: 0;
+transform: translate(50%, -50%);
+}
+
+.number-selection input[type="checkbox"]:checked + label {
+background-color: #007bff;
+color: white;
+border: 1px solid #007bff;
+transform: scale(1.1);
+}
+
+button {
+padding: 10px 20px;
+cursor: pointer;
+background-color: #007bff;
+color: white;
+border: none;
+border-radius: 5px;
+transition: background-color 0.3s ease;
+font-size: 1rem; /* Ajuste de tamaño de fuente */
+}
+
+button:hover {
+background-color: #0056b3;
+}
+
+button:disabled {
+background-color: #ccc;
+cursor: not-allowed;
+}
+
+/* Media Queries para hacer que la página sea responsive */
+@media (max-width: 768px) {
+.number-selection {
+gap: 5px; /* Espacio más pequeño entre los elementos */
+}
+
+.number-selection label {
+font-size: 1rem; /* Tamaño de fuente reducido */
+padding: 8px 12px; /* Padding ajustado */
+}
+
+table th, table td {
+font-size: 0.9rem; /* Reducir tamaño de fuente */
+padding: 8px; /* Ajustar padding */
+}
+}
+
+@media (max-width: 480px) {
+h1 {
+font-size: 1.5rem; /* Reducir tamaño de fuente para móviles */
+}
+
+.number-selection label {
+font-size: 0.9rem; /* Tamaño de fuente más pequeño */
+padding: 5px 10px; /* Padding más pequeño */
+}
+
+button {
+width: 100%; /* Botón toma el 100% del ancho en móviles */
+padding: 12px; /* Ajustar padding del botón */
+}
+
+input[type="text"] {
+width: 100%; /* Ajustar ancho de los campos de texto */
+max-width: none; /* Eliminar máximo ancho en móviles */
+}
+}
+</style>
 </head>
 <body>
-  <h1>Registro de Sorteo</h1>
+<h1>Registro de Sorteo</h1>
 
-  <div class="container">
-    <div class="sorteo-info">
-      <label for="sorteo-name">Nombre del Sorteo:</label>
-      <input type="text" id="sorteo-name" required>
-    </div>
+<div class="container">
+<div class="sorteo-info">
+<label for="sorteo-name">Nombre del Sorteo:</label>
+<input type="text" id="sorteo-name" required>
+</div>
 
-    <!-- Selección de números de forma visual -->
-    <div class="number-selection">
-       <input type="checkbox" id="checkbox-1" value="1">
-      <label for="checkbox-1">1</label>
+<!-- Selección de números de forma visual -->
+<div class="number-selection">
+<!-- Cada input debe tener un ID único y su label correspondiente con el atributo for -->
+<input type="checkbox" id="checkbox-1" value="1">
+<label for="checkbox-1">1</label>
 
-      <input type="checkbox" id="checkbox-2" value="2">
-      <label for="checkbox-2">2</label>
+<input type="checkbox" id="checkbox-2" value="2">
+<label for="checkbox-2">2</label>
 
-      <input type="checkbox" id="checkbox-3" value="3">
-      <label for="checkbox-3">3</label>
+<input type="checkbox" id="checkbox-3" value="3">
+<label for="checkbox-3">3</label>
 
-      <input type="checkbox" id="checkbox-4" value="4">
-      <label for="checkbox-4">4</label>
+<input type="checkbox" id="checkbox-4" value="4">
+<label for="checkbox-4">4</label>
 
-      <input type="checkbox" id="checkbox-5" value="5">
-      <label for="checkbox-5">5</label>
+<input type="checkbox" id="checkbox-5" value="5">
+<label for="checkbox-5">5</label>
 
-      <input type="checkbox" id="checkbox-6" value="6">
-      <label for="checkbox-6">6</label>
+<input type="checkbox" id="checkbox-6" value="6">
+<label for="checkbox-6">6</label>
 
-      <input type="checkbox" id="checkbox-7" value="7">
-      <label for="checkbox-7">7</label>
+<input type="checkbox" id="checkbox-7" value="7">
+<label for="checkbox-7">7</label>
 
-      <input type="checkbox" id="checkbox-8" value="8">
-      <label for="checkbox-8">8</label>
+<input type="checkbox" id="checkbox-8" value="8">
+<label for="checkbox-8">8</label>
 
-      <input type="checkbox" id="checkbox-9" value="9">
-      <label for="checkbox-9">9</label>
+<input type="checkbox" id="checkbox-9" value="9">
+<label for="checkbox-9">9</label>
 
-      <input type="checkbox" id="checkbox-10" value="10">
-      <label for="checkbox-10">10</label>
-	  
-	  <input type="checkbox" id="checkbox-11" value="11">
+<input type="checkbox" id="checkbox-10" value="10">
+<label for="checkbox-10">10</label>
+<input type="checkbox" id="checkbox-11" value="11">
 <label for="checkbox-11">11</label>
 
 <input type="checkbox" id="checkbox-12" value="12">
@@ -378,132 +475,149 @@
 
 <input type="checkbox" id="checkbox-100" value="100">
 <label for="checkbox-100">100</label>
-    </div>
 
-    <table id="sorteo-table">
-      <thead>
-        <tr>
-          <th>Número</th>
-          <th>Nombre</th>
-          <th>Sorteo</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
 
-    <div class="form-group">
-      <label for="participant-name">Nombre del Participante:</label>
-      <input type="text" id="participant-name" required>
-      <button id="add-participant">Agregar Participante</button>
-    </div>
-  </div>
+</div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const sorteoNameInput = document.getElementById('sorteo-name');
-      const addParticipantButton = document.getElementById('add-participant');
-      const sorteoTableBody = document.querySelector('#sorteo-table tbody');
-      const participantNameInput = document.getElementById('participant-name');
-      const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
+<table id="sorteo-table">
+<thead>
+<tr>
+<th>Número</th>
+<th>Nombre</th>
+<th>Sorteo</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 
-      // Obtener números registrados al cargar la página
-      obtenerNumerosRegistrados();
+<div class="form-group">
+<label for="participant-name">Nombre del Participante:</label>
+<input type="text" id="participant-name" required>
+<button id="add-participant">Agregar Participante</button>
+</div>
+</div>
 
-      addParticipantButton.addEventListener('click', function () {
-        const sorteoName = sorteoNameInput.value.trim();
-        const participantName = participantNameInput.value.trim();
-        
-        // Obtener números seleccionados
-        const selectedNumbers = Array.from(numberCheckboxes)
-          .filter(checkbox => checkbox.checked)
-          .map(checkbox => checkbox.value);
+<!-- Resto del código JavaScript (igual al original) -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+const sorteoNameInput = document.getElementById('sorteo-name');
+const addParticipantButton = document.getElementById('add-participant');
+const sorteoTableBody = document.querySelector('#sorteo-table tbody');
+const participantNameInput = document.getElementById('participant-name');
+const numberCheckboxes = document.querySelectorAll('.number-selection input[type="checkbox"]');
+const registeredNumbers = new Set(); // Set para almacenar números registrados
 
-        // Validaciones
-        if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
-          alert("Por favor, completa todos los campos y selecciona al menos un número.");
-          return;
-        }
+// Obtener números registrados al cargar la página
+obtenerNumerosRegistrados();
 
-        // Agregar participante y números al sorteo
-        selectedNumbers.forEach(function (number) {
-          const row = document.createElement('tr');
-          const numberCell = document.createElement('td');
-          const nameCell = document.createElement('td');
-          const sorteoCell = document.createElement('td');
+addParticipantButton.addEventListener('click', function () {
+const sorteoName = sorteoNameInput.value.trim();
+const participantName = participantNameInput.value.trim();
+// Obtener números seleccionados
+const selectedNumbers = Array.from(numberCheckboxes)
+.filter(checkbox => checkbox.checked)
+.map(checkbox => checkbox.value);
 
-          numberCell.textContent = number;
-          nameCell.textContent = participantName;
-          sorteoCell.textContent = sorteoName;
+// Validaciones
+if (!sorteoName || selectedNumbers.length === 0 || !participantName) {
+alert("Por favor, completa todos los campos y selecciona al menos un número.");
+return;
+}
 
-          row.appendChild(numberCell);
-          row.appendChild(nameCell);
-          row.appendChild(sorteoCell);
-          sorteoTableBody.appendChild(row);
+// Agregar participante y números al sorteo
+selectedNumbers.forEach(function (number) {
+// Verificar si el número ya está registrado
+if (!registeredNumbers.has(number)) { // Solo agregar si no está registrado
+const row = document.createElement('tr');
+const numberCell = document.createElement('td');
+const nameCell = document.createElement('td');
+const sorteoCell = document.createElement('td');
 
-          // Llamada al API para guardar en la base de datos
-          guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
-        });
+numberCell.textContent = number;
+nameCell.textContent = participantName;
+sorteoCell.textContent = sorteoName;
 
-        // Limpiar los campos de entrada
-        participantNameInput.value = '';
-        numberCheckboxes.forEach(checkbox => checkbox.checked = false);
-      });
+row.appendChild(numberCell);
+row.appendChild(nameCell);
+row.appendChild(sorteoCell);
+sorteoTableBody.appendChild(row);
 
-      function guardarParticipanteEnBaseDeDatos(sorteo, numero, nombre) {
-        const url = 'https://prod-02.brazilsouth.logic.azure.com/workflows/e0216dc0080c434f92f90ffda79fd4ff/triggers/manual/paths/invoke/crear_participante?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lWqG4wSkg3jW3VK7Sl-5oRVdUsijaLZ3BzovP6e86ZA';
+// Llamada al API para guardar en la base de datos
+guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
+} else {
+alert(`El número ${number} ya está registrado.`);
+}
+});
 
-        const data = {
-          Numero: numero.toString(),
-          Nombre: nombre,
-          Sorteo: sorteo
-        };
+// Limpiar los campos de entrada
+participantNameInput.value = '';
+numberCheckboxes.forEach(checkbox => checkbox.checked = false);
+});
 
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Participante guardado:', data);
-        })
-        .catch(error => {
-          console.error('Error al guardar participante:', error);
-        });
-      }
+function guardarParticipanteEnBaseDeDatos(sorteo, numero, nombre) {
+const url = 'https://prod-02.brazilsouth.logic.azure.com/workflows/e0216dc0080c434f92f90ffda79fd4ff/triggers/manual/paths/invoke/crear_participante?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=lWqG4wSkg3jW3VK7Sl-5oRVdUsijaLZ3BzovP6e86ZA';
 
-      function obtenerNumerosRegistrados() {
-        const url = 'https://prod-21.brazilsouth.logic.azure.com/workflows/a1f66a512b30401f837963fb67c270fb/triggers/manual/paths/invoke/obtener_registros?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=wv5unUjOMZBO6-uen9yvRsJi-ao7WAkE_pB35q_0D7k';
+const data = {
+Numero: numero.toString(),
+Nombre: nombre,
+Sorteo: sorteo
+};
 
-        fetch(url, {
-          method: 'GET'
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Registros obtenidos:', data);
-          data.forEach(registro => {
-            const row = document.createElement('tr');
-            const numberCell = document.createElement('td');
-            const nameCell = document.createElement('td');
-            const sorteoCell = document.createElement('td');
+fetch(url, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => {
+console.log('Participante guardado:', data);
+})
+.catch(error => {
+console.error('Error al guardar participante:', error);
+});
+}
 
-            numberCell.textContent = registro.Numero;
-            nameCell.textContent = registro["Nombre y Apellido"];
-            sorteoCell.textContent = registro.Sorteo;
+function obtenerNumerosRegistrados() {
+const url = 'https://prod-21.brazilsouth.logic.azure.com/workflows/a1f66a512b30401f837963fb67c270fb/triggers/manual/paths/invoke/obtener_registros?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=wv5unUjOMZBO6-uen9yvRsJi-ao7WAkE_pB35q_0D7k';
 
-            row.appendChild(numberCell);
-            row.appendChild(nameCell);
-            row.appendChild(sorteoCell);
-            sorteoTableBody.appendChild(row);
-          });
-        })
-        .catch(error => {
-          console.error('Error al obtener registros:', error);
-        });
-      }
-    });
-  </script>
+fetch(url, {
+method: 'GET'
+})
+.then(response => response.json())
+.then(data => {
+console.log('Registros obtenidos:', data);
+
+// Marcar los checkboxes correspondientes y añadir al Set de números registrados
+data.forEach(registro => {
+registeredNumbers.add(registro.Numero); // Guardar el número como registrado
+const checkbox = document.querySelector(`.number-selection input[value="${registro.Numero}"]`);
+if (checkbox) {
+checkbox.disabled = true; // Desactivar checkbox si el número está registrado
+}
+
+// Agregar los registros a la tabla
+const row = document.createElement('tr');
+const numberCell = document.createElement('td');
+const nameCell = document.createElement('td');
+const sorteoCell = document.createElement('td');
+
+numberCell.textContent = registro.Numero;
+nameCell.textContent = registro["Nombre y Apellido"];
+sorteoCell.textContent = registro.Sorteo;
+
+row.appendChild(numberCell);
+row.appendChild(nameCell);
+row.appendChild(sorteoCell);
+sorteoTableBody.appendChild(row);
+});
+})
+.catch(error => {
+console.error('Error al obtener registros:', error);
+});
+}
+});
+</script>
 </body>
 </html>
