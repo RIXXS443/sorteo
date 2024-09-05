@@ -426,28 +426,22 @@
 
         // Agregar participante y números al sorteo
         selectedNumbers.forEach(function (number) {
-          // Verificar si el número ya está en la tabla
-          const existingRow = Array.from(sorteoTableBody.rows).find(row => row.cells[0].textContent === number);
-          if (!existingRow) { // Solo agregar si no existe
-            const row = document.createElement('tr');
-            const numberCell = document.createElement('td');
-            const nameCell = document.createElement('td');
-            const sorteoCell = document.createElement('td');
+          const row = document.createElement('tr');
+          const numberCell = document.createElement('td');
+          const nameCell = document.createElement('td');
+          const sorteoCell = document.createElement('td');
 
-            numberCell.textContent = number;
-            nameCell.textContent = participantName;
-            sorteoCell.textContent = sorteoName;
+          numberCell.textContent = number;
+          nameCell.textContent = participantName;
+          sorteoCell.textContent = sorteoName;
 
-            row.appendChild(numberCell);
-            row.appendChild(nameCell);
-            row.appendChild(sorteoCell);
-            sorteoTableBody.appendChild(row);
+          row.appendChild(numberCell);
+          row.appendChild(nameCell);
+          row.appendChild(sorteoCell);
+          sorteoTableBody.appendChild(row);
 
-            // Llamada al API para guardar en la base de datos
-            guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
-          } else {
-            alert(`El número ${number} ya está registrado.`);
-          }
+          // Llamada al API para guardar en la base de datos
+          guardarParticipanteEnBaseDeDatos(sorteoName, number, participantName);
         });
 
         // Limpiar los campos de entrada
@@ -474,8 +468,6 @@
         .then(response => response.json())
         .then(data => {
           console.log('Participante guardado:', data);
-          // Actualizar la tabla después de agregar el participante
-          obtenerNumerosRegistrados();
         })
         .catch(error => {
           console.error('Error al guardar participante:', error);
@@ -491,19 +483,6 @@
         .then(response => response.json())
         .then(data => {
           console.log('Registros obtenidos:', data);
-          // Limpiar la tabla antes de actualizar
-          sorteoTableBody.innerHTML = '';
-
-          const registeredNumbers = data.map(registro => registro.Numero); // Obtener los números registrados
-
-          // Marcar los checkboxes correspondientes
-          numberCheckboxes.forEach(checkbox => {
-            if (registeredNumbers.includes(checkbox.value)) {
-              checkbox.checked = true; // Marcar el checkbox si el número está registrado
-            }
-          });
-
-          // Agregar los registros a la tabla
           data.forEach(registro => {
             const row = document.createElement('tr');
             const numberCell = document.createElement('td');
